@@ -1,0 +1,189 @@
+(function () {
+  "use strict";
+
+  const els = {
+    root: document.documentElement,
+    search: document.getElementById("searchInput"),
+    directory: document.getElementById("directory"),
+    logoEsom: document.querySelector(".hero__logo--esom"),
+    logoMaaden: document.querySelector(".hero__logo--maaden"),
+  };
+
+  const icons = {
+    phone:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>',
+    whatsApp:
+      '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.883 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>',
+    search:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>',
+  };
+
+  let query = "";
+
+  function setVar(name, value) {
+    els.root.style.setProperty(name, value);
+  }
+
+  function applyConfig() {
+    if (typeof CONFIG === "undefined") return;
+
+    const { logos, spacing } = CONFIG;
+    const esomH = Math.round((logos.esom.height ?? 34) * (logos.esom.scale || 1));
+    const maadenH = Math.round((logos.maaden.height ?? 34) * (logos.maaden.scale || 1));
+    const rowH = Math.max(esomH, maadenH);
+
+    setVar("--logo-esom-height", `${esomH}px`);
+    setVar("--logo-maaden-height", `${maadenH}px`);
+    setVar("--logo-row-height", `${rowH}px`);
+    setVar("--logo-esom-offset-x", `${logos.esom.offsetX || 0}px`);
+    setVar("--logo-esom-offset-y", `${logos.esom.offsetY || 0}px`);
+    setVar("--logo-maaden-offset-x", `${logos.maaden.offsetX || 0}px`);
+    setVar("--logo-maaden-offset-y", `${logos.maaden.offsetY || 0}px`);
+    setVar("--logo-gap", `${logos.gap}px`);
+    setVar("--logo-divider-height", `${logos.dividerHeight ?? rowH}px`);
+    setVar("--logo-divider-offset-y", `${logos.dividerOffsetY || 0}px`);
+    setVar("--logo-row-offset-x", `${logos.rowOffsetX || 0}px`);
+    setVar("--logo-space-above", `${logos.spaceAbove || 0}px`);
+    setVar("--logo-space-below", `${logos.spaceBelow || 0}px`);
+    setVar("--title-to-search-gap", `${spacing.afterTitle ?? 16}px`);
+    setVar("--hero-shell-padding-y", `${spacing.shellPaddingY ?? 18}px`);
+    setVar("--hero-shell-padding-x", `${spacing.shellPaddingX ?? 20}px`);
+    setVar("--logo-box-padding-y", `${spacing.logoPaddingY}px`);
+    setVar("--logo-box-padding-x", `${spacing.logoPaddingX}px`);
+
+    if (els.logoEsom && logos.esom.src) els.logoEsom.src = logos.esom.src;
+    if (els.logoMaaden && logos.maaden.src) els.logoMaaden.src = logos.maaden.src;
+  }
+
+  function digitsOnly(phone) {
+    return phone.replace(/\D/g, "");
+  }
+
+  function formatPhone(phone) {
+    const d = digitsOnly(phone);
+    if (d.length !== 10) return phone;
+    return `${d.slice(0, 3)} ${d.slice(3, 6)} ${d.slice(6)}`;
+  }
+
+  function telHref(phone) {
+    const d = digitsOnly(phone);
+    if (d.length === 10 && d[0] === "0") return `tel:${d}`;
+    if (d.startsWith("966")) return `tel:+${d}`;
+    return `tel:+966${d.replace(/^0/, "")}`;
+  }
+
+  function whatsAppHref(phone) {
+    return `https://wa.me/966${digitsOnly(phone).replace(/^0/, "")}`;
+  }
+
+  function whatsAppOn() {
+    return typeof CONFIG === "undefined" || CONFIG.features?.whatsApp !== false;
+  }
+
+  function esc(text) {
+    return String(text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function matches(section, contact) {
+    if (!query) return true;
+
+    const haystack = [section.title, contact.name, contact.role, contact.phone]
+      .join(" ")
+      .toLowerCase();
+
+    return haystack.includes(query.toLowerCase());
+  }
+
+  function countLabel(n) {
+    return n === 1 ? `1 ${COPY.contact}` : `${n} ${COPY.contacts}`;
+  }
+
+  function actionLink({ href, className, label, phone, icon, external }) {
+    const attrs = external ? ' target="_blank" rel="noopener noreferrer"' : "";
+
+    return (
+      `<a href="${href}" class="contact-card__action ${className}"${attrs} aria-label="${esc(label)}">` +
+      `<span class="contact-card__action-icon">${icon}</span>` +
+      `<span class="contact-card__action-num">${esc(phone)}</span>` +
+      `</a>`
+    );
+  }
+
+  function contactCard(contact, i) {
+    const phone = formatPhone(contact.phone);
+
+    const actions = [
+      actionLink({
+        href: telHref(contact.phone),
+        className: "contact-card__action--call",
+        label: `${COPY.call} ${phone}`,
+        phone,
+        icon: icons.phone,
+        external: false,
+      }),
+    ];
+
+    if (whatsAppOn()) {
+      actions.push(
+        actionLink({
+          href: whatsAppHref(contact.phone),
+          className: "contact-card__action--whatsapp",
+          label: `${COPY.whatsApp} ${phone}`,
+          phone,
+          icon: icons.whatsApp,
+          external: true,
+        })
+      );
+    }
+
+    return (
+      `<article class="contact-card" style="--delay:${i * 60}ms">` +
+      `<div class="contact-card__body">` +
+      `<h3 class="contact-card__name">${esc(contact.name)}</h3>` +
+      `<p class="contact-card__role">${esc(contact.role)}</p>` +
+      `</div>` +
+      `<div class="contact-card__actions">${actions.join("")}</div>` +
+      `</article>`
+    );
+  }
+
+  function sectionBlock(section) {
+    const contacts = section.contacts.filter((c) => matches(section, c));
+    if (!contacts.length) return "";
+
+    return (
+      `<section class="dept" data-section="${esc(section.id)}">` +
+      `<header class="dept__header">` +
+      `<h2 class="dept__title">${esc(section.title)}</h2>` +
+      `<span class="dept__count">${countLabel(contacts.length)}</span>` +
+      `</header>` +
+      `<div class="dept__grid">${contacts.map(contactCard).join("")}</div>` +
+      `</section>`
+    );
+  }
+
+  function emptyState() {
+    return (
+      `<div class="empty">` +
+      `<div class="empty__icon">${icons.search}</div>` +
+      `<p class="empty__text">${COPY.noResults}</p>` +
+      `</div>`
+    );
+  }
+
+  function render() {
+    const html = DIRECTORY.sections.map(sectionBlock).filter(Boolean).join("");
+    els.directory.innerHTML = html || emptyState();
+  }
+
+  applyConfig();
+  render();
+  els.search.addEventListener("input", (e) => {
+    query = e.target.value.trim();
+    render();
+  });
+})();

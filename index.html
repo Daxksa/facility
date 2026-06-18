@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F7F6F3" />
+  <meta name="description" content="MAADEN facility services contact directory" />
+  <title>MAADEN | Facility Services Directory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient__orb ambient__orb--1"></div>
+    <div class="ambient__orb ambient__orb--2"></div>
+    <div class="ambient__grid"></div>
+  </div>
+
+  <header class="hero">
+    <div class="hero__shell">
+      <div class="hero__logos">
+        <img src="assets/esom.png" alt="ESOM" class="hero__logo hero__logo--esom" />
+        <span class="hero__logos-divider" aria-hidden="true"></span>
+        <img src="assets/maaden.png" alt="MAADEN" class="hero__logo hero__logo--maaden" />
+      </div>
+
+      <h1 class="hero__title">
+        <span class="hero__title-eyebrow">Facility Services</span>
+        <span class="hero__title-main">Directory</span>
+      </h1>
+
+      <div class="search-wrap">
+        <svg class="search-wrap__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/>
+        </svg>
+        <input
+          type="text"
+          id="searchInput"
+          class="search-wrap__input"
+          placeholder="Search by name or department..."
+          autocomplete="off"
+          inputmode="search"
+          enterkeyhint="search"
+          role="searchbox"
+          aria-label="Search by name or department"
+        />
+      </div>
+    </div>
+  </header>
+
+  <main class="directory" id="directory"></main>
+
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
