@@ -521,6 +521,43 @@ body {
   }
 }
 
+/* iOS / mobile WebViews (WhatsApp, Safari) — desktop unchanged */
+@media (hover: none) and (pointer: coarse) {
+  html {
+    min-height: 0;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+
+  body {
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+    -webkit-overflow-scrolling: auto;
+  }
+
+  .ambient {
+    display: none;
+  }
+
+  .hero__shell {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--bg-card);
+  }
+
+  .hero__logo {
+    mix-blend-mode: normal;
+  }
+
+  .dept,
+  .contact-card {
+    animation: none;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

@@ -180,15 +180,34 @@
     els.directory.innerHTML = html || emptyState();
   }
 
+  function isTouchDevice() {
+    return window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+  }
+
   function syncViewportHeight() {
     const height = window.visualViewport?.height ?? window.innerHeight;
     setVar("--vh", `${height * 0.01}px`);
   }
 
+  function fixMobileLayout() {
+    if (!isTouchDevice()) return;
+
+    const scrollY = window.scrollY;
+    syncViewportHeight();
+
+    // iOS WebViews can freeze document height after rotation.
+    document.documentElement.style.height = "auto";
+    document.body.style.height = "auto";
+    void document.body.offsetHeight;
+    document.documentElement.style.removeProperty("height");
+    document.body.style.removeProperty("height");
+
+    window.scrollTo(0, scrollY);
+  }
+
   function onViewportChange() {
     syncViewportHeight();
-    // iOS WebViews (e.g. WhatsApp) can lag layout after rotation.
-    window.requestAnimationFrame(syncViewportHeight);
+    window.requestAnimationFrame(fixMobileLayout);
   }
 
   applyConfig();
@@ -196,8 +215,12 @@
   syncViewportHeight();
   window.addEventListener("resize", onViewportChange);
   window.addEventListener("orientationchange", () => {
-    setTimeout(onViewportChange, 100);
-    setTimeout(onViewportChange, 350);
+    setTimeout(fixMobileLayout, 50);
+    setTimeout(fixMobileLayout, 200);
+    setTimeout(fixMobileLayout, 500);
+  });
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted) fixMobileLayout();
   });
   window.visualViewport?.addEventListener("resize", onViewportChange);
 
