@@ -180,8 +180,27 @@
     els.directory.innerHTML = html || emptyState();
   }
 
+  function syncViewportHeight() {
+    const height = window.visualViewport?.height ?? window.innerHeight;
+    setVar("--vh", `${height * 0.01}px`);
+  }
+
+  function onViewportChange() {
+    syncViewportHeight();
+    // iOS WebViews (e.g. WhatsApp) can lag layout after rotation.
+    window.requestAnimationFrame(syncViewportHeight);
+  }
+
   applyConfig();
   render();
+  syncViewportHeight();
+  window.addEventListener("resize", onViewportChange);
+  window.addEventListener("orientationchange", () => {
+    setTimeout(onViewportChange, 100);
+    setTimeout(onViewportChange, 350);
+  });
+  window.visualViewport?.addEventListener("resize", onViewportChange);
+
   els.search.addEventListener("input", (e) => {
     query = e.target.value.trim();
     render();
