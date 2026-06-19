@@ -65,10 +65,16 @@
       return `${d.slice(0, 3)} ${d.slice(3, 6)} ${d.slice(6)}`;
     }
     if (d.startsWith("94") && d.length === 11) {
-      return `+${d.slice(0, 2)} ${d.slice(2, 4)} ${d.slice(4, 7)} ${d.slice(7)}`;
+      const sep = "\u202f";
+      return `+${d.slice(0, 2)}${sep}${d.slice(2, 4)}${sep}${d.slice(4, 7)}${sep}${d.slice(7)}`;
     }
     if (String(phone).trim().startsWith("+")) return String(phone).trim();
     return phone;
+  }
+
+  function isIntlPhone(phone) {
+    const d = digitsOnly(phone);
+    return !(d.length === 10 && d[0] === "0");
   }
 
   function telHref(phone) {
@@ -113,13 +119,14 @@
     return n === 1 ? `1 ${COPY.contact}` : `${n} ${COPY.contacts}`;
   }
 
-  function actionLink({ href, className, label, phone, icon, external }) {
+  function actionLink({ href, className, label, phone, icon, external, intl }) {
     const attrs = external ? ' target="_blank" rel="noopener noreferrer"' : "";
+    const numClass = intl ? " contact-card__action-num--intl" : "";
 
     return (
       `<a href="${href}" class="contact-card__action ${className}"${attrs} aria-label="${esc(label)}">` +
       `<span class="contact-card__action-icon">${icon}</span>` +
-      `<span class="contact-card__action-num">${esc(phone)}</span>` +
+      `<span class="contact-card__action-num${numClass}">${esc(phone)}</span>` +
       `</a>`
     );
   }
@@ -140,14 +147,16 @@
     ];
 
     if (whatsAppOn()) {
+      const waNumber = contact.whatsApp || contact.phone;
       actions.push(
         actionLink({
-          href: whatsAppHref(contact.whatsApp || contact.phone),
+          href: whatsAppHref(waNumber),
           className: "contact-card__action--whatsapp",
           label: `${COPY.whatsApp} ${whatsAppPhone}`,
           phone: whatsAppPhone,
           icon: icons.whatsApp,
           external: true,
+          intl: isIntlPhone(waNumber),
         })
       );
     }

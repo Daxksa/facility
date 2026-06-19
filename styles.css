@@ -435,6 +435,12 @@ body {
   letter-spacing: 0.03em;
   line-height: 1.1;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.contact-card__action-num--intl {
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
 }
 
 .contact-card__action--call {
