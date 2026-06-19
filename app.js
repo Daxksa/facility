@@ -61,8 +61,14 @@
 
   function formatPhone(phone) {
     const d = digitsOnly(phone);
-    if (d.length !== 10) return phone;
-    return `${d.slice(0, 3)} ${d.slice(3, 6)} ${d.slice(6)}`;
+    if (d.length === 10 && d[0] === "0") {
+      return `${d.slice(0, 3)} ${d.slice(3, 6)} ${d.slice(6)}`;
+    }
+    if (d.startsWith("94") && d.length === 11) {
+      return `+${d.slice(0, 2)} ${d.slice(2, 4)} ${d.slice(4, 7)} ${d.slice(7)}`;
+    }
+    if (String(phone).trim().startsWith("+")) return String(phone).trim();
+    return phone;
   }
 
   function telHref(phone) {
@@ -73,7 +79,11 @@
   }
 
   function whatsAppHref(phone) {
-    return `https://wa.me/966${digitsOnly(phone).replace(/^0/, "")}`;
+    const d = digitsOnly(phone);
+    if (d.length === 10 && d[0] === "0") {
+      return `https://wa.me/966${d.slice(1)}`;
+    }
+    return `https://wa.me/${d}`;
   }
 
   function whatsAppOn() {
@@ -91,7 +101,8 @@
   function matches(section, contact) {
     if (!query) return true;
 
-    const haystack = [section.title, contact.name, contact.role, contact.phone]
+    const haystack = [section.title, contact.name, contact.role, contact.phone, contact.whatsApp]
+      .filter(Boolean)
       .join(" ")
       .toLowerCase();
 
@@ -115,6 +126,7 @@
 
   function contactCard(contact, i) {
     const phone = formatPhone(contact.phone);
+    const whatsAppPhone = formatPhone(contact.whatsApp || contact.phone);
 
     const actions = [
       actionLink({
@@ -130,10 +142,10 @@
     if (whatsAppOn()) {
       actions.push(
         actionLink({
-          href: whatsAppHref(contact.phone),
+          href: whatsAppHref(contact.whatsApp || contact.phone),
           className: "contact-card__action--whatsapp",
-          label: `${COPY.whatsApp} ${phone}`,
-          phone,
+          label: `${COPY.whatsApp} ${whatsAppPhone}`,
+          phone: whatsAppPhone,
           icon: icons.whatsApp,
           external: true,
         })

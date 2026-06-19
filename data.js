@@ -40,6 +40,7 @@ const DIRECTORY = {
           name: "Mr. Siva Kumar",
           role: "Catering Manager",
           phone: "0542654630",
+          whatsApp: "+94771517644",
         },
       ],
     },
