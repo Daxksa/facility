@@ -5,8 +5,6 @@
     root: document.documentElement,
     search: document.getElementById("searchInput"),
     directory: document.getElementById("directory"),
-    logoEsom: document.querySelector(".hero__logo--esom"),
-    logoMaaden: document.querySelector(".hero__logo--maaden"),
   };
 
   const icons = {
@@ -27,32 +25,11 @@
   function applyConfig() {
     if (typeof CONFIG === "undefined") return;
 
-    const { logos, spacing } = CONFIG;
-    const esomH = Math.round((logos.esom.height ?? 34) * (logos.esom.scale || 1));
-    const maadenH = Math.round((logos.maaden.height ?? 34) * (logos.maaden.scale || 1));
-    const rowH = Math.max(esomH, maadenH);
+    const { spacing } = CONFIG;
 
-    setVar("--logo-esom-height", `${esomH}px`);
-    setVar("--logo-maaden-height", `${maadenH}px`);
-    setVar("--logo-row-height", `${rowH}px`);
-    setVar("--logo-esom-offset-x", `${logos.esom.offsetX || 0}px`);
-    setVar("--logo-esom-offset-y", `${logos.esom.offsetY || 0}px`);
-    setVar("--logo-maaden-offset-x", `${logos.maaden.offsetX || 0}px`);
-    setVar("--logo-maaden-offset-y", `${logos.maaden.offsetY || 0}px`);
-    setVar("--logo-gap", `${logos.gap}px`);
-    setVar("--logo-divider-height", `${logos.dividerHeight ?? rowH}px`);
-    setVar("--logo-divider-offset-y", `${logos.dividerOffsetY || 0}px`);
-    setVar("--logo-row-offset-x", `${logos.rowOffsetX || 0}px`);
-    setVar("--logo-space-above", `${logos.spaceAbove || 0}px`);
-    setVar("--logo-space-below", `${logos.spaceBelow || 0}px`);
     setVar("--title-to-search-gap", `${spacing.afterTitle ?? 16}px`);
     setVar("--hero-shell-padding-y", `${spacing.shellPaddingY ?? 18}px`);
     setVar("--hero-shell-padding-x", `${spacing.shellPaddingX ?? 20}px`);
-    setVar("--logo-box-padding-y", `${spacing.logoPaddingY}px`);
-    setVar("--logo-box-padding-x", `${spacing.logoPaddingX}px`);
-
-    if (els.logoEsom && logos.esom.src) els.logoEsom.src = logos.esom.src;
-    if (els.logoMaaden && logos.maaden.src) els.logoMaaden.src = logos.maaden.src;
   }
 
   function digitsOnly(phone) {

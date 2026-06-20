@@ -1,19 +1,5 @@
 :root {
   /* layout — defaults; config.js overrides via applyConfig() */
-  --logo-esom-height: 34px;
-  --logo-maaden-height: 34px;
-  --logo-esom-offset-x: 0px;
-  --logo-esom-offset-y: 0px;
-  --logo-maaden-offset-x: 0px;
-  --logo-maaden-offset-y: 0px;
-  --logo-row-offset-x: 0px;
-  --logo-gap: 18px;
-  --logo-divider-height: 42px;
-  --logo-divider-offset-y: 0px;
-  --logo-box-padding-y: 0px;
-  --logo-box-padding-x: 6px;
-  --logo-space-above: 0px;
-  --logo-space-below: 0px;
   --title-to-search-gap: 1rem;
   --hero-shell-padding-y: 1.15rem;
   --hero-shell-padding-x: 1.25rem;
@@ -136,55 +122,6 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-card);
-}
-
-.hero__logos {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--logo-gap);
-  padding: var(--logo-box-padding-y) var(--logo-box-padding-x);
-  margin: var(--logo-space-above) auto var(--logo-space-below);
-  min-height: var(--logo-row-height, 36px);
-  max-width: 100%;
-  direction: ltr;
-  transform: translateX(var(--logo-row-offset-x));
-}
-
-.hero__logos-divider {
-  width: 1px;
-  height: var(--logo-divider-height);
-  align-self: center;
-  flex-shrink: 0;
-  margin-inline: 0.1rem;
-  transform: translateY(var(--logo-divider-offset-y));
-  background: linear-gradient(
-    180deg,
-    transparent,
-    rgba(181, 162, 107, 0.45) 20%,
-    rgba(181, 162, 107, 0.45) 80%,
-    transparent
-  );
-}
-
-.hero__logo {
-  display: block;
-  width: auto;
-  object-fit: contain;
-  object-position: center;
-  flex-shrink: 0;
-}
-
-.hero__logo--maaden {
-  height: var(--logo-maaden-height);
-  max-width: min(190px, 46vw);
-  transform: translate(var(--logo-maaden-offset-x), var(--logo-maaden-offset-y));
-}
-
-.hero__logo--esom {
-  height: var(--logo-esom-height);
-  max-width: min(78px, 22vw);
-  transform: translate(var(--logo-esom-offset-x), var(--logo-esom-offset-y));
 }
 
 .hero__title {
