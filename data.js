@@ -6,7 +6,7 @@ const DIRECTORY = {
       contacts: [
         {
           name: "Mr. Fahad AlAmri",
-          role: "Facility Manager",
+          role: "Facility Manager — Maaden",
           phone: "0546890260",
         },
       ],
